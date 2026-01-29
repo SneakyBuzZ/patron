@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { NAVBAR_LIST } from "@/utils/list-util";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 
-const Navbar = () => {
-  const authenticated = false;
+const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +15,7 @@ const Navbar = () => {
         <MenuBar />
         <div className="flex justify-end items-center gap-4">
           <div className="hidden md:flex justify-start items-center gap-2">
-            {authenticated ? (
+            {isAuthenticated ? (
               <>
                 <Button
                   variant={"bright"}
