@@ -13,6 +13,7 @@ import {
   generatePostPreSignedUrls,
   generatePresignedUrl,
   getAllGroups,
+  getAllPosts,
   getGroupById,
   getHasJoined,
   getPostsInGroup,
@@ -29,6 +30,7 @@ import {
   GroupType,
   PostType,
 } from '@/lib/types';
+import { generateCommunityDescription } from '../gemini';
 
 // * AWS S3
 
@@ -167,10 +169,24 @@ export const useGetAllPostsInGroup = () => {
   });
 };
 
+export const useGetAllPosts = () => {
+  return useMutation({
+    mutationFn: () => getAllPosts(),
+  });
+};
+
 // *BOUNTY
 
 export const useCreateBounty = () => {
   return useMutation({
     mutationFn: (bounty: CreateBountyType) => createBounty(bounty),
+  });
+};
+
+// *GEMINi
+
+export const useGenerateCommunityDescription = () => {
+  return useMutation({
+    mutationFn: (input: string) => generateCommunityDescription(input),
   });
 };

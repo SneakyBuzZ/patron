@@ -1,13 +1,31 @@
 import PostCard from '@/components/root/PostCard';
 import { InfiniteSlider } from '@/components/ui/infinite-slider';
 import { TextShimmer } from '@/components/ui/text-shimmer';
+import { useGetAllPosts } from '@/lib/query/query';
+import { PostType } from '@/lib/types';
 import { Hand } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const HomePage = () => {
+  const { mutateAsync: getAllPosts } = useGetAllPosts();
+  const [posts, setPosts] = useState<PostType[]>([]);
+
+  useEffect(() => {
+    getAllPosts().then((data) => setPosts(data));
+  }, []);
+
   return (
     <section className="w-full flex justify-start items-start h-full overflow-y-auto">
-      <div className="flex h-full w-7/12 p-5 px-14">
-        <PostCard />
+      <div className="flex flex-col h-full w-7/12 p-5 px-14 overflow-y-auto scrollbar-hide gap-7">
+        {posts.map((each) => (
+          <PostCard
+            key={each.id || ''}
+            address={each.onwner.name}
+            avatar={each.onwner.image}
+            description={each.postDescription}
+            image={each.postImage}
+          />
+        ))}
       </div>
       <div className="flex flex-col items-center justify-start gap-2 h-full p-5 px-10 w-5/12 border-l border-l-PATRON_BORDER_COLOR">
         <div className="flex flex-col w-full gap-1 mb-1">
@@ -64,11 +82,15 @@ const HomePage = () => {
             </div>
             <div className="w-full flex justify-between items-center border border-PATRON_BORDER_COLOR rounded-md p-2">
               <div className="flex justify-start items-center gap-2 ">
-                <img className="w-10 h-10 rounded-full" src="/bounty.png" alt="profile" />
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src="https://i.pinimg.com/564x/99/f3/5a/99f35a4179e659ce63250408e68c8cf6.jpg"
+                  alt="profile"
+                />
                 <div className="flex flex-col justify-center items-start">
-                  <span className="text-md text-PATRON_TEXT_WHITE_PRIMARY">Kaushik</span>
+                  <span className="text-md text-PATRON_TEXT_WHITE_PRIMARY">Sneakybuzz</span>
                   <span className="text-xs text-PATRON_TEXT_WHITE_SECONDARY">
-                    0x23343FNKNDM234....
+                    0x23343FN32DM234....
                   </span>
                 </div>
               </div>

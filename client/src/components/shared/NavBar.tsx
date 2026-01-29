@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import AddressBadge from '@/components/shared/AddressBadge';
 import { ToggleTheme } from '@/components/shared/ToggleTheme';
 import { cn } from '@/lib/utils';
-import { useAccount, useConnect } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
+import { Button } from '../ui/button';
 
 interface NavBarType {
   showAddress?: boolean;
@@ -12,7 +13,14 @@ interface NavBarType {
 
 const NavBar = ({ showAddress = false, className }: NavBarType) => {
   const { address } = useAccount();
-  const {} = useConnect();
+  const { disconnectAsync } = useDisconnect();
+
+  console.log('address', address);
+
+  const handleDisconnect = async () => {
+    await disconnectAsync();
+    console.log('DISCONNECTED: ');
+  };
 
   return (
     <nav
@@ -35,6 +43,14 @@ const NavBar = ({ showAddress = false, className }: NavBarType) => {
       </div>
       <div className="flex items-center gap-4">
         <ToggleTheme />
+        {address && address.length > 0 && showAddress && (
+          <Button
+            onClick={handleDisconnect}
+            className="h-7 px-2 text-xs bg-neutral-800 border border-neutral-700 text-neutral-400"
+          >
+            Disconnect
+          </Button>
+        )}
         {address && address.length > 0 && showAddress && <ProfileBadge />}
       </div>
     </nav>

@@ -28,7 +28,7 @@ const putObject = async (
 ) => {
     const cmd = new PutObjectCommand({
         Bucket: BUCKET_NAME,
-        Key: `patron/${fileName}`,
+        Key: `patron-dapp/${fileName}`,
         ContentType: fileType,
         Body: buffer,
     });
@@ -39,7 +39,7 @@ const putObject = async (
 export const getObject = async (fileName: string) => {
     const cmd = new GetObjectCommand({
         Bucket: BUCKET_NAME,
-        Key: `patron/${fileName}`,
+        Key: `patron-dapp/${fileName}`,
     });
 
     const url = await getSignedUrl(client, cmd, { expiresIn: 5 });
@@ -48,9 +48,12 @@ export const getObject = async (fileName: string) => {
 };
 
 export const uploadObject = async (req: Request, res: Response) => {
+    console.log('YES I GOT IT!');
     if (!req.file) {
         throw new ApiError(400, 'No file uploaded');
     }
+
+    console.log('FILE : ', req.file);
 
     const fileName = req.file.originalname;
     const fileType = req.file.mimetype;
@@ -72,7 +75,11 @@ export const getPreSignedUrlToUpload = async (req: Request, res: Response) => {
 
     if (true) {
         try {
-            // await putObject(String(fileName), String(contentType));
+            await putObject(
+                String(fileName),
+                String(contentType),
+                Buffer.from('')
+            );
 
             res.status(200).json(new ApiResponse(200, {}, 'Success'));
         } catch (error) {

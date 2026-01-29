@@ -11,7 +11,7 @@ import { Group } from '@/components/root/Group';
 
 const GroupDialog = () => {
   const [groups, setGroups] = useState<GroupType[] | null>(null);
-  const [groupsWithJoinStatus, setGroupsWithJoinStatus] = useState<GroupType[] | null | any[]>([]);
+  const [groupsWithJoinStatus, setGroupsWithJoinStatus] = useState<GroupType[] | null>([]);
   const { mutateAsync: getAllGroups, isPending: isGetting } = useGetAllGroups();
   const { walletAddress } = useWalletStore();
   const { toast } = useToast();
@@ -24,7 +24,7 @@ const GroupDialog = () => {
     getAllGroups().then((response) => {
       setGroups(response);
     });
-  }, []);
+  }, [getAllGroups]);
 
   useEffect(() => {
     if (groups) {
@@ -38,12 +38,15 @@ const GroupDialog = () => {
         })
       ).then(setGroupsWithJoinStatus);
     }
-  }, [groups, walletAddress]);
+
+    console.log('groups', groups);
+    console.log('groupsWithJoinStatus', groupsWithJoinStatus);
+  }, [groups, walletAddress, getHasUserJoined, groupsWithJoinStatus]);
 
   const handleJoin = async (groupId: string) => {
     const response = await addUserToGroup({
       groupId: groupId,
-      walletAddress: walletAddress?.toString()!,
+      walletAddress: walletAddress ? walletAddress.toString() : '',
     });
 
     if (response.statusCode === 200) {
@@ -63,32 +66,32 @@ const GroupDialog = () => {
       <div className="grid grid-cols-1 mx-auto py-5 text-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {isGetting ? (
           <>
-            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 flex-col items-center justify-start border border-neutral-300">
+            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 dark:bg-neutral-900 flex-col items-center justify-start border border-neutral-800">
               <AspectRatio ratio={3 / 1} className="w-full">
-                <Skeleton className="h-full w-full object-cover rounded-t-lg border-neutral-100" />
+                <Skeleton className="h-full w-full object-cover rounded-t-lg bg-neutral-400 dark:bg-neutral-950 border-neutral-100" />
               </AspectRatio>
-              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6"></Skeleton>
+              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6 bg-neutral-300 dark:bg-neutral-800"></Skeleton>
               <Skeleton className="text-xs text-PATRON_TEXT_WHITE_SECONDARY/60 text-start p-2 ml-2 pb-4 w-11/12 h-10 self-start my-3"></Skeleton>
             </Skeleton>
-            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 flex-col items-center justify-start border border-neutral-300">
+            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 dark:bg-neutral-900 flex-col items-center justify-start border border-neutral-800">
               <AspectRatio ratio={3 / 1} className="w-full">
-                <Skeleton className="h-full w-full object-cover rounded-t-lg border-neutral-100" />
+                <Skeleton className="h-full w-full object-cover rounded-t-lg bg-neutral-400 dark:bg-neutral-950 border-neutral-100" />
               </AspectRatio>
-              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6"></Skeleton>
+              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6 bg-neutral-300 dark:bg-neutral-800"></Skeleton>
               <Skeleton className="text-xs text-PATRON_TEXT_WHITE_SECONDARY/60 text-start p-2 ml-2 pb-4 w-11/12 h-10 self-start my-3"></Skeleton>
             </Skeleton>
-            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 flex-col items-center justify-start border border-neutral-300">
+            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 dark:bg-neutral-900 flex-col items-center justify-start border border-neutral-800">
               <AspectRatio ratio={3 / 1} className="w-full">
-                <Skeleton className="h-full w-full object-cover rounded-t-lg border-neutral-100" />
+                <Skeleton className="h-full w-full object-cover rounded-t-lg bg-neutral-400 dark:bg-neutral-950 border-neutral-100" />
               </AspectRatio>
-              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6"></Skeleton>
+              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6 bg-neutral-300 dark:bg-neutral-800"></Skeleton>
               <Skeleton className="text-xs text-PATRON_TEXT_WHITE_SECONDARY/60 text-start p-2 ml-2 pb-4 w-11/12 h-10 self-start my-3"></Skeleton>
             </Skeleton>
-            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 flex-col items-center justify-start border border-neutral-300">
+            <Skeleton className="cursor-pointer flex rounded-lg bg-neutral-200 dark:bg-neutral-900 flex-col items-center justify-start border border-neutral-800">
               <AspectRatio ratio={3 / 1} className="w-full">
-                <Skeleton className="h-full w-full object-cover rounded-t-lg border-neutral-100" />
+                <Skeleton className="h-full w-full object-cover rounded-t-lg bg-neutral-400 dark:bg-neutral-950 border-neutral-100" />
               </AspectRatio>
-              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6"></Skeleton>
+              <Skeleton className="mx-2 px-3 py-2 mt-1 w-1/3 self-start my-3 h-6 bg-neutral-300 dark:bg-neutral-800"></Skeleton>
               <Skeleton className="text-xs text-PATRON_TEXT_WHITE_SECONDARY/60 text-start p-2 ml-2 pb-4 w-11/12 h-10 self-start my-3"></Skeleton>
             </Skeleton>
           </>

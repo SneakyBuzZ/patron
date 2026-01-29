@@ -1,11 +1,15 @@
+import GroupDialog from '@/components/root/GroupDialogs';
+
 const Explore = () => {
   return (
-    <div className="flex flex-col h-full items-start justify-start w-full">
-      <div className="w-full px-7 py-3 border-b border-b-PATRON_BORDER_COLOR">
-        <h1 className="text-xl font-audio-wide font-medium ">Explore</h1>
+    <section className="w-full min-h-screen">
+      <h1 className="text-xl w-full py-2 pt-3 px-7 font-audio-wide border-b dark:border-b-PATRON_BORDER_COLOR">
+        Explore
+      </h1>
+      <div className="h-5/6 px-7">
+        <GroupDialog />
       </div>
-      <div className="w-full flex flex-col justify-start items-start"></div>
-    </div>
+    </section>
   );
 };
 

@@ -188,6 +188,25 @@ export const getAllPosts = async (req: Request, res: Response) => {
     const allPosts = await db.post.findMany({
         skip,
         take: Number(limit),
+        select: {
+            id: true,
+            postImage: true,
+            postDescription: true,
+            createdAt: true,
+            onwner: {
+                select: {
+                    name: true,
+                    image: true,
+                    address: true,
+                },
+            },
+            bounty: {
+                select: {
+                    bountyType: true,
+                    bountyValue: true,
+                },
+            },
+        },
     });
 
     if (!allPosts) {

@@ -21,7 +21,7 @@ import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
-import { useCreateGroup } from '@/lib/query/query';
+import { useCreateGroup, useGenerateCommunityDescription } from '@/lib/query/query';
 import { MoonLoader } from 'react-spinners';
 import useWalletStore from '@/lib/zustand/WalletStore';
 import { useToast } from '@/hooks/use-toast';
@@ -33,6 +33,8 @@ import FlexRow from '@/components/ui/flex-row';
 import FlexCol from '@/components/ui/flex-col';
 import { Switch } from '@/components/ui/switch';
 import { uploadImageToS3 } from '@/lib/api';
+// import FilterDialog from '@/components/ai/FilterDialog';
+import { delay } from '@/lib/utils';
 
 const CreateGroup = () => {
   const { toast } = useToast();
@@ -48,10 +50,14 @@ const CreateGroup = () => {
   const [communityName, setCommunityName] = useState('');
   const [communityDescription, setCommunityDescription] = useState('');
 
+  // const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+
   const { data: hash, sendTransactionAsync } = useSendTransaction();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   });
+
+  const { mutateAsync: generateDescription, isPending } = useGenerateCommunityDescription();
 
   const handleCoverChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -86,23 +92,32 @@ const CreateGroup = () => {
   const groupName = watch('groupName');
   const groupDescription = watch('groupDescription');
 
-  if (groupName) {
-    console.log('GROUP NAME HAS BEEN SET', groupName);
-    console.log('GROUP DESCRIPTION HAS NOT BEEN SET', groupDescription);
-  }
-
   const { mutateAsync: createGroup, isPending: isCreating } = useCreateGroup();
   const { walletAddress } = useWalletStore();
+
+  async function handleGenerateDescription() {
+    if (groupName) {
+      const to = '0xe5b8c74cE5C016cccFa206E961e8E43d0E505521' as `0x${string}`;
+      await sendTransactionAsync({ to, value: parseEther('0.001') });
+      const response = await generateDescription(groupName);
+      form.setValue('groupDescription', response);
+    }
+  }
 
   async function onSubmit(values: z.infer<typeof createGroupSchema>) {
     const to = '0xe5b8c74cE5C016cccFa206E961e8E43d0E505521' as `0x${string}`;
     await sendTransactionAsync({ to, value: parseEther('0.001') });
+    console.log('PAYMENT DONE:');
+
+    // setIsFilterDialogOpen(true);
 
     const formData = new FormData();
 
     if (cover && profile) {
       await uploadImageToS3(cover);
+      console.log('YES');
       await uploadImageToS3(profile);
+      console.log('Yayy');
 
       formData.append('images', cover);
       formData.append('images', profile);
@@ -114,206 +129,235 @@ const CreateGroup = () => {
     formData.append('isPrivate', String(allowAnyone));
     formData.append('isCrypto', String(isCryptoGroup));
 
+    console.log('FORM', formData);
+
     const response = await createGroup(formData);
 
+    await delay(5000);
+
     if (response?.status === 200) {
-      navigate('/all-groups');
+      navigate('/explore');
       toast({ title: 'Group created successfully' });
     } else {
       toast({ title: 'Failed to create group' });
     }
+
+    // setIsFilterDialogOpen(false);
   }
 
   return (
-    <section className="w-full min-h-screen border-l">
-      <GradientBackground className="opacity-5 relative aspect-[1155/678] w-[36.125rem] bg-gradient-to-tr from-[#9011ffd8] to-[#e9ff1f4d] sm:w-[72.1875rem] custom-fade-in" />
-      <div className="w-full flex flex-row justify-center items-start">
-        <div className="w-[62%] min-h-screen flex flex-col justify-start items-start border-r">
-          <h1 className="text-xl w-full py-2 pt-3 px-7 font-audio-wide border-b dark:border-b-PATRON_BORDER_COLOR">
-            Create your own channel
-          </h1>
-          <div className="flex flex-col justify-center items-center gap-5 py-10 px-7 w-full">
-            <FlexRow className="w-full gap-3">
-              <div className="w-full flex flex-col items-start gap-3">
-                <Label htmlFor="picture">Your channel's coverpage</Label>
-                <Input
-                  onChange={(e) => handleCoverChange(e, 'cover')}
-                  id="picture"
-                  type="file"
-                  className=""
-                />
-              </div>
-              <div className="w-full flex flex-col items-start gap-3">
-                <Label htmlFor="picture">Your channel's Profile</Label>
-                <Input
-                  onChange={(e) => handleCoverChange(e, 'profile')}
-                  id="picture"
-                  type="file"
-                  className=""
-                />
-              </div>
-            </FlexRow>
+    <>
+      <section className="w-full min-h-screen border-l">
+        <GradientBackground className="opacity-5 relative aspect-[1155/678] w-[36.125rem] bg-gradient-to-tr from-[#9011ffd8] to-[#e9ff1f4d] sm:w-[72.1875rem] custom-fade-in" />
+        <div className="w-full flex flex-row justify-center items-start">
+          <div className="w-[62%] min-h-screen flex flex-col justify-start items-start border-r">
+            <h1 className="text-xl w-full py-2 pt-3 px-7 font-audio-wide border-b dark:border-b-PATRON_BORDER_COLOR">
+              Create your own channel
+            </h1>
 
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full md:pb-10">
-                <FormField
-                  control={form.control}
-                  name="groupName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Community's Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="py-5"
-                          placeholder="Unleash your creativity!"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            setCommunityName(e.target.value);
-                          }}
-                        />
-                      </FormControl>
-                      <FormDescription className="text-neutral-600">
-                        Craft a captivating name that reflects your group's essence.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="groupDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your channel's Story</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          className="min-h-36"
-                          placeholder="Share your passion!"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            setCommunityDescription(e.target.value);
-                          }}
-                        />
-                      </FormControl>
-                      <FormDescription className="text-neutral-600">
-                        Describe your channel's purpose and what makes it special.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button variant={'patron'} type="submit" className="text-purple-500">
-                  {status === TransactionStatus.Sending ? (
-                    <div className="flex gap-2">
+            <div className="flex flex-col justify-center items-center gap-5 pt-4 px-7 w-full">
+              {groupName && !groupDescription && (
+                <div className="w-full">
+                  <Button
+                    onClick={handleGenerateDescription}
+                    className="text-xs w-56 h-8 flex justify-between border border-PATRON_YELLOW/40 bg-transparent hover:bg-neutral-900 text-PATRON_YELLOW"
+                  >
+                    {isPending ? (
+                      <>
+                        Generating
+                        <MoonLoader className="ml-1" size={14} color="#e9ff1f4d" />
+                      </>
+                    ) : (
+                      <>Generate Description ✨ </>
+                    )}
+                  </Button>
+                </div>
+              )}
+              <FlexRow className="w-full gap-3">
+                <div className="w-full flex flex-col items-start gap-3">
+                  <Label htmlFor="picture">Your channel's coverpage</Label>
+                  <Input
+                    onChange={(e) => handleCoverChange(e, 'cover')}
+                    id="picture"
+                    type="file"
+                    className=""
+                  />
+                </div>
+                <div className="w-full flex flex-col items-start gap-3">
+                  <Label htmlFor="picture">Your channel's Profile</Label>
+                  <Input
+                    onChange={(e) => handleCoverChange(e, 'profile')}
+                    id="picture"
+                    type="file"
+                    className=""
+                  />
+                </div>
+              </FlexRow>
+
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full md:pb-10">
+                  <FormField
+                    control={form.control}
+                    name="groupName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Your Community's Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="py-5"
+                            placeholder="Unleash your creativity!"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              setCommunityName(e.target.value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-neutral-600">
+                          Craft a captivating name that reflects your group's essence.
+                        </FormDescription>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="groupDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Your channel's Story</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            className="min-h-36"
+                            placeholder="Share your passion!"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              setCommunityDescription(e.target.value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-neutral-600">
+                          Describe your channel's purpose and what makes it special.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button variant={'patron'} type="submit" className="text-purple-500">
+                    {status === TransactionStatus.Sending ? (
+                      <div className="flex gap-2">
+                        <MoonLoader className="mr-2" size={14} color="#fff" />
+                        <span> Transaction Taking Place</span>
+                      </div>
+                    ) : isCreating ? (
                       <MoonLoader size={14} color="#fff" />
-                      <span> Transaction Taking Place</span>
-                    </div>
-                  ) : isCreating ? (
-                    <MoonLoader size={14} color="#fff" />
-                  ) : (
-                    'Create Your Community'
-                  )}
-                  {isConfirming && <div>Waiting for confirmation...</div>}
-                  {isConfirmed && <div>Transaction confirmed.</div>}
-                </Button>
-                <h5 className="text-md">
-                  Pay <span className="font-semibold text-PATRON_TEXT_WHITE_PRIMARY">0.001</span>{' '}
-                  Eth to create a community
-                </h5>
-              </form>
-            </Form>
+                    ) : (
+                      'Create Your Community'
+                    )}
+                  </Button>
+                  {isConfirming && <div className="text-md">Waiting for confirmation...</div>}
+                  {isConfirmed && <div className="text-md">Transaction confirmed.</div>}
+                  <h5 className="text-md">
+                    Pay <span className="font-semibold text-PATRON_TEXT_WHITE_PRIMARY">0.001</span>{' '}
+                    Eth to create a community
+                  </h5>
+                </form>
+              </Form>
+            </div>
           </div>
-        </div>
 
-        <FlexCol className="w-[38%] h-full">
-          <FlexCol className="border-b w-full p-3 items-start">
-            <FlexCol className="w-full items-start">
-              {coverPreviewUrl !== null ? (
-                <img
-                  src={coverPreviewUrl}
-                  alt="Cover Page"
-                  className="h-32 w-full object-cover outline outline-1 outline-neutral-300 rounded-md select-none pointer-events-none"
-                />
-              ) : (
-                <FlexCol className="h-32 w-full bg-neutral-300 dark:bg-PATRON_DARK_GRAY rounded-md gap-1">
-                  <ImageDown size={40} color="#3e3e3e" />
-                  {/* <h1 className="text-xs text-neutral-500 dark:text-PATRON_TEXT_WHITE_PRIMARY">
+          <FlexCol className="w-[38%] h-full">
+            <FlexCol className="border-b w-full p-3 items-start">
+              <FlexCol className="w-full items-start">
+                {coverPreviewUrl !== null ? (
+                  <img
+                    src={coverPreviewUrl}
+                    alt="Cover Page"
+                    className="h-32 w-full object-cover outline outline-1 outline-neutral-300 rounded-md select-none pointer-events-none"
+                  />
+                ) : (
+                  <FlexCol className="h-32 w-full bg-neutral-300 dark:bg-PATRON_DARK_GRAY rounded-md gap-1">
+                    <ImageDown size={40} color="#3e3e3e" />
+                    {/* <h1 className="text-xs text-neutral-500 dark:text-PATRON_TEXT_WHITE_PRIMARY">
                     Choose a Cover Page
                   </h1> */}
+                  </FlexCol>
+                )}
+                {profilePreviewUrl !== null ? (
+                  <img
+                    src={profilePreviewUrl}
+                    alt="Cover Page"
+                    className="select-none pointer-events-none h-24 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-full transform -translate-y-11 translate-x-5 object-cover outline outline-neutral-300"
+                  />
+                ) : (
+                  <FlexCol className="h-24 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-full transform -translate-y-11 translate-x-5">
+                    <UserPen size={40} color="#3e3e3e" />
+                  </FlexCol>
+                )}
+              </FlexCol>
+              <FlexCol className="items-start gap-2 px-5 transform -translate-y-6">
+                <h1 className="text-xl">{communityName || 'Community Name'}</h1>
+                <p className="text-sm">
+                  {communityDescription.slice(0, communityDescription.length / 4) + '...' ||
+                    'Community Description'}
+                </p>
+              </FlexCol>
+            </FlexCol>
+
+            <FlexCol className="items-start w-full p-3 gap-3 py-4">
+              <FlexRow className="gap-1">
+                <Settings size={15} />
+                <h1 className="text-lg font-sans font-medium">Settings</h1>
+              </FlexRow>
+
+              <FlexRow className="w-full border rounded-md py-3">
+                <FlexCol className="w-5/6 items-start">
+                  <h4 className="text-sm font-medium text-neutral-700 dark:text-PATRON_TEXT_WHITE_PRIMARY">
+                    Public Access
+                  </h4>
+                  <span className="text-start text-xs w-4/5 text-neutral-500">
+                    {allowAnyone
+                      ? 'Anyone can join this community.'
+                      : 'Only invited members can join this community.'}
+                  </span>
                 </FlexCol>
-              )}
-              {profilePreviewUrl !== null ? (
-                <img
-                  src={profilePreviewUrl}
-                  alt="Cover Page"
-                  className="select-none pointer-events-none h-24 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-full transform -translate-y-11 translate-x-5 object-cover outline outline-neutral-300"
+                <Switch
+                  checked={allowAnyone}
+                  onCheckedChange={() => setAllowAnyone(!allowAnyone)}
+                  className=""
                 />
-              ) : (
-                <FlexCol className="h-24 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-full transform -translate-y-11 translate-x-5">
-                  <UserPen size={40} color="#3e3e3e" />
+              </FlexRow>
+
+              <FlexRow className="w-full border rounded-md py-3">
+                <FlexCol className="w-5/6 items-start">
+                  <h4 className="text-sm font-medium text-neutral-700 dark:text-PATRON_TEXT_WHITE_PRIMARY">
+                    Crypto Group
+                  </h4>
+                  <span className="text-start text-xs w-4/5 text-neutral-500">
+                    {isCryptoGroup
+                      ? 'Members must pay in crypto to participate.'
+                      : 'No crypto payments required for participation.'}
+                  </span>
                 </FlexCol>
-              )}
-            </FlexCol>
-            <FlexCol className="items-start gap-2 px-5 transform -translate-y-6">
-              <h1 className="text-xl">{communityName || 'Community Name'}</h1>
-              <p className="text-sm">
-                {communityDescription.slice(0, communityDescription.length / 4) + '...' ||
-                  'Community Description'}
-              </p>
+                <Switch
+                  checked={isCryptoGroup}
+                  onCheckedChange={() => setIsCryptoGroup(!isCryptoGroup)}
+                  className="ml-2"
+                />
+              </FlexRow>
+              <span className="text-sm text-neutral-500">
+                These settings can be changed later by the creator by paying{' '}
+                <span className="text-neutral-600 font-semibold">0.05</span> Eth
+              </span>
             </FlexCol>
           </FlexCol>
-
-          <FlexCol className="items-start w-full p-3 gap-3 py-4">
-            <FlexRow className="gap-1">
-              <Settings size={15} />
-              <h1 className="text-lg font-sans font-medium">Settings</h1>
-            </FlexRow>
-
-            <FlexRow className="w-full border rounded-md py-3">
-              <FlexCol className="w-5/6 items-start">
-                <h4 className="text-sm font-medium text-neutral-700 dark:text-PATRON_TEXT_WHITE_PRIMARY">
-                  Public Access
-                </h4>
-                <span className="text-start text-xs w-4/5 text-neutral-500">
-                  {allowAnyone
-                    ? 'Anyone can join this community.'
-                    : 'Only invited members can join this community.'}
-                </span>
-              </FlexCol>
-              <Switch
-                checked={allowAnyone}
-                onCheckedChange={() => setAllowAnyone(!allowAnyone)}
-                className=""
-              />
-            </FlexRow>
-
-            <FlexRow className="w-full border rounded-md py-3">
-              <FlexCol className="w-5/6 items-start">
-                <h4 className="text-sm font-medium text-neutral-700 dark:text-PATRON_TEXT_WHITE_PRIMARY">
-                  Crypto Group
-                </h4>
-                <span className="text-start text-xs w-4/5 text-neutral-500">
-                  {isCryptoGroup
-                    ? 'Members must pay in crypto to participate.'
-                    : 'No crypto payments required for participation.'}
-                </span>
-              </FlexCol>
-              <Switch
-                checked={isCryptoGroup}
-                onCheckedChange={() => setIsCryptoGroup(!isCryptoGroup)}
-                className="ml-2"
-              />
-            </FlexRow>
-            <span className="text-sm text-neutral-500">
-              These settings can be changed later by the creator by paying{' '}
-              <span className="text-neutral-600 font-semibold">0.05</span> Eth
-            </span>
-          </FlexCol>
-        </FlexCol>
-      </div>
-    </section>
+        </div>
+      </section>
+      {/* <FilterDialog open={isFilterDialogOpen} /> */}
+    </>
   );
 };
 

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const createGroupSchema = z.object({
-  groupName: z.string().min(2).max(50),
-  groupDescription: z.string().min(2).max(400),
+  groupName: z.string(),
+  groupDescription: z.string(),
 });
 
 export const createPostSchema = z.object({

@@ -62,6 +62,7 @@ const ProfileBadge = () => {
 
   useEffect(() => {
     getUserByAddress(walletAddress?.toString().toLowerCase() || '').then((response) => {
+      console.log('RESPONSE: ', response);
       if (response?.status === 204) {
         setIsUserNew(true);
         addUserToDb(walletAddress?.toString().toLowerCase() || '');

@@ -39,6 +39,8 @@ export const getUserByAddress = async (
         );
     }
 
+    console.log('KYA IDHAR AAYA? : ', address);
+
     const existedUser = await db.user.findUnique({
         where: {
             address,

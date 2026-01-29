@@ -42,3 +42,7 @@ export function convertDateToDDMMYYYY(dateString: string | Date): string {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 }
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

@@ -1,19 +1,8 @@
-/*
-  Warnings:
-
-  - The primary key for the `users` table will be changed. If it partially fails, the table could be left without primary key constraint.
-
-*/
 -- CreateEnum
-CREATE TYPE "PrivacyStatus" AS ENUM ('public', 'private');
+CREATE TYPE "BountyType" AS ENUM ('TECH', 'DESIGN', 'MARKETING', 'OTHER');
 
--- AlterTable
-ALTER TABLE "users" DROP CONSTRAINT "users_pkey",
-ADD COLUMN     "image" TEXT DEFAULT 'https://i.pinimg.com/564x/9b/b0/66/9bb066864b0d225c324551ee2c83125d.jpg',
-ALTER COLUMN "id" DROP DEFAULT,
-ALTER COLUMN "id" SET DATA TYPE TEXT,
-ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "users_id_seq";
+-- CreateEnum
+CREATE TYPE "BountyStatus" AS ENUM ('OPEN', 'CLOSED');
 
 -- CreateTable
 CREATE TABLE "nounce" (
@@ -25,6 +14,18 @@ CREATE TABLE "nounce" (
 );
 
 -- CreateTable
+CREATE TABLE "users" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "image" TEXT DEFAULT 'https://i.pinimg.com/564x/9b/b0/66/9bb066864b0d225c324551ee2c83125d.jpg',
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "groups" (
     "id" TEXT NOT NULL,
     "groupName" TEXT NOT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE "groups" (
     "groupDisplayImage" TEXT NOT NULL,
     "groupCoverImage" TEXT NOT NULL,
     "ownerId" TEXT NOT NULL,
-    "privacyStatus" "PrivacyStatus" NOT NULL,
+    "isPrivate" BOOLEAN NOT NULL,
     "isCrypto" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -59,8 +60,7 @@ CREATE TABLE "posts" (
     "postDescription" TEXT NOT NULL,
     "ownerId" TEXT NOT NULL,
     "groupId" TEXT NOT NULL,
-    "whoSolvedId" TEXT,
-    "isSolved" BOOLEAN NOT NULL DEFAULT false,
+    "bountyId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -76,6 +76,20 @@ CREATE TABLE "comments" (
     CONSTRAINT "comments_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "bounties" (
+    "id" TEXT NOT NULL,
+    "bountyValue" DOUBLE PRECISION NOT NULL,
+    "bountyType" "BountyType" NOT NULL,
+    "bountyStatus" "BountyStatus" NOT NULL DEFAULT 'OPEN',
+    "bountyOwnerId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "postId" TEXT NOT NULL,
+
+    CONSTRAINT "bounties_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "nounce_walletAddress_key" ON "nounce"("walletAddress");
 
@@ -83,10 +97,46 @@ CREATE UNIQUE INDEX "nounce_walletAddress_key" ON "nounce"("walletAddress");
 CREATE UNIQUE INDEX "nounce_nounce_key" ON "nounce"("nounce");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_address_key" ON "users"("address");
+
+-- CreateIndex
+CREATE INDEX "users_name_idx" ON "users"("name");
+
+-- CreateIndex
+CREATE INDEX "users_address_idx" ON "users"("address");
+
+-- CreateIndex
+CREATE INDEX "groups_groupName_idx" ON "groups"("groupName");
+
+-- CreateIndex
+CREATE INDEX "groups_ownerId_idx" ON "groups"("ownerId");
+
+-- CreateIndex
+CREATE INDEX "groups_isPrivate_idx" ON "groups"("isPrivate");
+
+-- CreateIndex
+CREATE INDEX "groups_isCrypto_idx" ON "groups"("isCrypto");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "group_users_groupId_key" ON "group_users"("groupId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "group_users_userId_key" ON "group_users"("userId");
+
+-- CreateIndex
+CREATE INDEX "posts_postTitle_idx" ON "posts"("postTitle");
+
+-- CreateIndex
+CREATE INDEX "posts_ownerId_idx" ON "posts"("ownerId");
+
+-- CreateIndex
+CREATE INDEX "posts_groupId_idx" ON "posts"("groupId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "bounties_postId_key" ON "bounties"("postId");
+
+-- CreateIndex
+CREATE INDEX "bounties_bountyStatus_bountyType_bountyOwnerId_idx" ON "bounties"("bountyStatus", "bountyType", "bountyOwnerId");
 
 -- AddForeignKey
 ALTER TABLE "groups" ADD CONSTRAINT "groups_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -104,10 +154,13 @@ ALTER TABLE "posts" ADD CONSTRAINT "posts_ownerId_fkey" FOREIGN KEY ("ownerId") 
 ALTER TABLE "posts" ADD CONSTRAINT "posts_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "posts" ADD CONSTRAINT "posts_whoSolvedId_fkey" FOREIGN KEY ("whoSolvedId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_postId_fkey" FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bounties" ADD CONSTRAINT "bounties_bountyOwnerId_fkey" FOREIGN KEY ("bountyOwnerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bounties" ADD CONSTRAINT "bounties_postId_fkey" FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

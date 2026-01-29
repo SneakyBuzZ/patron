@@ -13,7 +13,7 @@ import { Config, Connector, CreateConnectorFn } from 'wagmi';
 import { ConnectMutate } from 'wagmi/query';
 
 interface WalletOptionsProps {
-  label: String;
+  label: string;
   connectors: readonly Connector<CreateConnectorFn>[];
   connect: ConnectMutate<Config, unknown>;
 }

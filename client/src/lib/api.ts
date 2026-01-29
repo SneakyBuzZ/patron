@@ -170,6 +170,7 @@ export const checkIfUserExists = async (walletAddress: string) => {
 };
 
 export const getUserIdByAddress = async (walletAddress: string) => {
+  console.log('YEH HAI? : ', walletAddress);
   const response = await axios.get(
     `http://localhost:8000/patron/api/user/get-userId?address=${walletAddress}`
   );
@@ -194,6 +195,7 @@ export const createGroup = async (formData: FormData) => {
   const ownerId = await getUserIdByAddress(String(walletAddress));
 
   formData.append('ownerId', ownerId);
+  console.log('formData after owner', formData);
 
   if (ownerId) {
     const response = await axios.post(
@@ -321,6 +323,12 @@ export const getPostsInGroup = async (groupId: string) => {
   const response = await axios.get(
     `http://localhost:8000/patron/api/post/get-groupPosts?groupId=${groupId}`
   );
+
+  return response.data.data;
+};
+
+export const getAllPosts = async () => {
+  const response = await axios.get(`http://localhost:8000/patron/api/post/get-all`);
 
   return response.data.data;
 };

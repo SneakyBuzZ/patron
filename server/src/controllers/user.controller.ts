@@ -258,6 +258,8 @@ export const getUserIdByAddress = async (req: Request, res: Response) => {
         );
     }
 
+    console.log('address', address);
+
     const userId = await db.user.findFirst({
         where: {
             address: String(address),
@@ -266,6 +268,8 @@ export const getUserIdByAddress = async (req: Request, res: Response) => {
             id: true,
         },
     });
+
+    console.log('userId', userId);
 
     if (!userId) {
         throw new ApiError(

@@ -6,7 +6,7 @@ import LandingPage from '@/_public/pages/LandingPage';
 import PublicLayout from '@/_public/PublicLayout';
 import NotFoundPage from '@/_public/pages/NotFoundPage';
 import HomePage from '@/_root/pages/HomePage';
-import AllGroups from '@/_root/pages/AllGroups';
+import MostPopular from '@/_root/pages/MostPopular';
 import CreateGroup from '@/_root/pages/CreateGroup';
 import { QueryProvider } from '@/lib/query/QueryProvider';
 import Explore from '@/_root/pages/Explore';
@@ -32,7 +32,7 @@ function App() {
                   <Route index path="/auth" element={<Web3Auth />} />
                 </Route>
                 <Route element={<RootLayout />}>
-                  <Route path="/all-groups" element={<AllGroups />} />
+                  <Route path="/popular" element={<MostPopular />} />
                   <Route path="/create-group" element={<CreateGroup />} />
                   <Route path={`/group/:slug`} element={<GroupPage />} />
                   <Route path={`/:slug/create-post`} element={<CreatePost />} />

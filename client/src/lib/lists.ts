@@ -137,7 +137,7 @@ export const SideBarList = [
       },
       {
         title: 'Most Popular',
-        path: '/all-groups',
+        path: '/popular',
         icon: TrendingUp,
       },
       {

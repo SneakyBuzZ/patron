@@ -23,6 +23,7 @@ export const uploadImageToCloudinary = async (req: Request, res: Response) => {
 };
 
 export const createGroup = async (req: Request, res: Response) => {
+    console.log('YEAH CREATE GROUp: ');
     const { groupDescription, groupName, isPrivate, isCrypto, ownerId } =
         req.body;
 
@@ -197,6 +198,8 @@ export const getAllGroups = async (_req: Request, res: Response) => {
             id: true,
         },
     });
+
+    console.log('ALL GROUPS: ', allGroups);
 
     if (!allGroups) {
         return res

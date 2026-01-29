@@ -33,6 +33,7 @@ export type createPostType = {
 };
 
 export type PostType = {
+  id?: string;
   postImage: string;
   postDescription: string;
   postTitle: string;
