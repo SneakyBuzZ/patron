@@ -1,32 +1,73 @@
 import Logo from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
-import { NAVBAR_LIST } from "@/utils/list-util";
+import { NAVBAR_LIST } from "@/utils/list";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import ConnectWallet from "./cta/connect-wallet";
+import { useConnection } from "wagmi";
+import { useSignIn } from "@/lib/api/mutations/auth-mutations";
+import Spinner from "@/components/shared/spinner";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { disconnect } from "@wagmi/core";
+import { config } from "@/lib/config/wagmi-config";
 
 const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+  const { isConnected, address } = useConnection();
+  const { mutateAsync: signIn, isPending, isSuccess } = useSignIn();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast("Successfully signed in!");
+      navigate({ to: "/app" });
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <nav className="absolute z-30 top-5 w-11/12 h-[56px] flex justify-between items-center bg-midnight-400/80 backdrop-blur-md border-dashed border-y border-neutral-700">
       <div className="w-full h-full flex justify-between items-center border-dashed border-x border-neutral-700 px-8">
-        <Link to="/" className="w-[100px]">
+        <Link to="/" className="w-60">
           <Logo withText />
         </Link>
         <MenuBar />
         <div className="flex justify-end items-center gap-4">
-          <div className="hidden md:flex justify-start items-center gap-2">
-            {isAuthenticated ? (
+          <div className="hidden md:flex justify-end items-center gap-2 w-60">
+            {isConnected && address ? (
               <>
-                <Button
-                  variant={"bright"}
-                  onClick={() => navigate({ to: "/" })}
-                >
-                  Application
-                </Button>
+                {isAuthenticated ? (
+                  <>
+                    <Button onClick={() => navigate({ to: "/app/discover" })}>
+                      Application
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant={"outline"}
+                      onClick={() => disconnect(config)}
+                    >
+                      Disconnect
+                    </Button>
+                    <Button
+                      variant={"secondary"}
+                      onClick={() => signIn(address)}
+                      disabled={isPending}
+                    >
+                      {isPending ? (
+                        <>
+                          <Spinner />
+                          Loading
+                        </>
+                      ) : (
+                        <>Sign with Wallet</>
+                      )}
+                    </Button>
+                  </>
+                )}
               </>
             ) : (
               <>
-                <Button variant={"bright"}>Connect Wallet</Button>
+                <ConnectWallet />
               </>
             )}
           </div>

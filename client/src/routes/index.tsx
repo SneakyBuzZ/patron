@@ -1,8 +1,9 @@
 import HeroImage from "@/components/_home/hero-image";
 import HeroSection from "@/components/_home/hero-section";
+import ConnectWallet from "@/components/layout/cta/connect-wallet";
 import Navbar from "@/components/layout/navbar";
 import Loading from "@/components/shared/loading";
-import { getAuthenticated } from "@/lib/api/user-api";
+import { getAuthenticated } from "@/lib/api/auth-api";
 import { delay } from "@/utils/delay";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -26,6 +27,7 @@ function HomeComponent() {
         <div className="relative z-10">
           <HeroSection />
           <HeroImage />
+          <ConnectWallet />
         </div>
       </main>
     </section>

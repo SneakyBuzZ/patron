@@ -3,10 +3,16 @@ import { cn } from "@/utils/cn";
 interface LogoProps {
   withText?: boolean;
   imgClassName?: string;
+  textClassName?: string;
   className?: string;
 }
 
-const Logo = ({ withText = false, imgClassName, className }: LogoProps) => {
+const Logo = ({
+  withText = false,
+  imgClassName,
+  className,
+  textClassName,
+}: LogoProps) => {
   if (!withText) {
     return (
       <div className={cn("flex justify-start items-center gap-2", className)}>
@@ -27,7 +33,12 @@ const Logo = ({ withText = false, imgClassName, className }: LogoProps) => {
           alt="Logo Image"
           className={cn("h-5", imgClassName)}
         />
-        <span className="tracking-tight text-[23px] text-white font-audiowide">
+        <span
+          className={cn(
+            "tracking-tight text-[23px] text-white font-audiowide",
+            textClassName,
+          )}
+        >
           Patron
         </span>
       </div>

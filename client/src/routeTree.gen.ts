@@ -9,38 +9,264 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppGamesRouteRouteImport } from './routes/app/games/route'
+import { Route as AppDaosRouteRouteImport } from './routes/app/daos/route'
+import { Route as AppCommunitiesRouteRouteImport } from './routes/app/communities/route'
+import { Route as AppProfileIndexRouteImport } from './routes/app/profile/index'
+import { Route as AppHomeIndexRouteImport } from './routes/app/home/index'
+import { Route as AppGamesIndexRouteImport } from './routes/app/games/index'
+import { Route as AppDiscoverIndexRouteImport } from './routes/app/discover/index'
+import { Route as AppDaosIndexRouteImport } from './routes/app/daos/index'
+import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
+import { Route as AppGamesQuizzesIndexRouteImport } from './routes/app/games/quizzes/index'
+import { Route as AppGamesLeaderboardIndexRouteImport } from './routes/app/games/leaderboard/index'
+import { Route as AppGamesAchievementsIndexRouteImport } from './routes/app/games/achievements/index'
+import { Route as AppDaosVotesIndexRouteImport } from './routes/app/daos/votes/index'
+import { Route as AppDaosProposalsIndexRouteImport } from './routes/app/daos/proposals/index'
+import { Route as AppDaosCreateIndexRouteImport } from './routes/app/daos/create/index'
+import { Route as AppCommunitiesJoinedIndexRouteImport } from './routes/app/communities/joined/index'
+import { Route as AppCommunitiesCreateIndexRouteImport } from './routes/app/communities/create/index'
 
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppGamesRouteRoute = AppGamesRouteRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppDaosRouteRoute = AppDaosRouteRouteImport.update({
+  id: '/daos',
+  path: '/daos',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppCommunitiesRouteRoute = AppCommunitiesRouteRouteImport.update({
+  id: '/communities',
+  path: '/communities',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProfileIndexRoute = AppProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppHomeIndexRoute = AppHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppGamesIndexRoute = AppGamesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppGamesRouteRoute,
+} as any)
+const AppDiscoverIndexRoute = AppDiscoverIndexRouteImport.update({
+  id: '/discover/',
+  path: '/discover/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppDaosIndexRoute = AppDaosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppDaosRouteRoute,
+} as any)
+const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppCommunitiesRouteRoute,
+} as any)
+const AppGamesQuizzesIndexRoute = AppGamesQuizzesIndexRouteImport.update({
+  id: '/quizzes/',
+  path: '/quizzes/',
+  getParentRoute: () => AppGamesRouteRoute,
+} as any)
+const AppGamesLeaderboardIndexRoute =
+  AppGamesLeaderboardIndexRouteImport.update({
+    id: '/leaderboard/',
+    path: '/leaderboard/',
+    getParentRoute: () => AppGamesRouteRoute,
+  } as any)
+const AppGamesAchievementsIndexRoute =
+  AppGamesAchievementsIndexRouteImport.update({
+    id: '/achievements/',
+    path: '/achievements/',
+    getParentRoute: () => AppGamesRouteRoute,
+  } as any)
+const AppDaosVotesIndexRoute = AppDaosVotesIndexRouteImport.update({
+  id: '/votes/',
+  path: '/votes/',
+  getParentRoute: () => AppDaosRouteRoute,
+} as any)
+const AppDaosProposalsIndexRoute = AppDaosProposalsIndexRouteImport.update({
+  id: '/proposals/',
+  path: '/proposals/',
+  getParentRoute: () => AppDaosRouteRoute,
+} as any)
+const AppDaosCreateIndexRoute = AppDaosCreateIndexRouteImport.update({
+  id: '/create/',
+  path: '/create/',
+  getParentRoute: () => AppDaosRouteRoute,
+} as any)
+const AppCommunitiesJoinedIndexRoute =
+  AppCommunitiesJoinedIndexRouteImport.update({
+    id: '/joined/',
+    path: '/joined/',
+    getParentRoute: () => AppCommunitiesRouteRoute,
+  } as any)
+const AppCommunitiesCreateIndexRoute =
+  AppCommunitiesCreateIndexRouteImport.update({
+    id: '/create/',
+    path: '/create/',
+    getParentRoute: () => AppCommunitiesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/app/communities': typeof AppCommunitiesRouteRouteWithChildren
+  '/app/daos': typeof AppDaosRouteRouteWithChildren
+  '/app/games': typeof AppGamesRouteRouteWithChildren
+  '/app/communities/': typeof AppCommunitiesIndexRoute
+  '/app/daos/': typeof AppDaosIndexRoute
+  '/app/discover': typeof AppDiscoverIndexRoute
+  '/app/games/': typeof AppGamesIndexRoute
+  '/app/home': typeof AppHomeIndexRoute
+  '/app/profile': typeof AppProfileIndexRoute
+  '/app/communities/create': typeof AppCommunitiesCreateIndexRoute
+  '/app/communities/joined': typeof AppCommunitiesJoinedIndexRoute
+  '/app/daos/create': typeof AppDaosCreateIndexRoute
+  '/app/daos/proposals': typeof AppDaosProposalsIndexRoute
+  '/app/daos/votes': typeof AppDaosVotesIndexRoute
+  '/app/games/achievements': typeof AppGamesAchievementsIndexRoute
+  '/app/games/leaderboard': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/quizzes': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/app/communities': typeof AppCommunitiesIndexRoute
+  '/app/daos': typeof AppDaosIndexRoute
+  '/app/discover': typeof AppDiscoverIndexRoute
+  '/app/games': typeof AppGamesIndexRoute
+  '/app/home': typeof AppHomeIndexRoute
+  '/app/profile': typeof AppProfileIndexRoute
+  '/app/communities/create': typeof AppCommunitiesCreateIndexRoute
+  '/app/communities/joined': typeof AppCommunitiesJoinedIndexRoute
+  '/app/daos/create': typeof AppDaosCreateIndexRoute
+  '/app/daos/proposals': typeof AppDaosProposalsIndexRoute
+  '/app/daos/votes': typeof AppDaosVotesIndexRoute
+  '/app/games/achievements': typeof AppGamesAchievementsIndexRoute
+  '/app/games/leaderboard': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/quizzes': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/app/communities': typeof AppCommunitiesRouteRouteWithChildren
+  '/app/daos': typeof AppDaosRouteRouteWithChildren
+  '/app/games': typeof AppGamesRouteRouteWithChildren
+  '/app/communities/': typeof AppCommunitiesIndexRoute
+  '/app/daos/': typeof AppDaosIndexRoute
+  '/app/discover/': typeof AppDiscoverIndexRoute
+  '/app/games/': typeof AppGamesIndexRoute
+  '/app/home/': typeof AppHomeIndexRoute
+  '/app/profile/': typeof AppProfileIndexRoute
+  '/app/communities/create/': typeof AppCommunitiesCreateIndexRoute
+  '/app/communities/joined/': typeof AppCommunitiesJoinedIndexRoute
+  '/app/daos/create/': typeof AppDaosCreateIndexRoute
+  '/app/daos/proposals/': typeof AppDaosProposalsIndexRoute
+  '/app/daos/votes/': typeof AppDaosVotesIndexRoute
+  '/app/games/achievements/': typeof AppGamesAchievementsIndexRoute
+  '/app/games/leaderboard/': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/quizzes/': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/communities'
+    | '/app/daos'
+    | '/app/games'
+    | '/app/communities/'
+    | '/app/daos/'
+    | '/app/discover'
+    | '/app/games/'
+    | '/app/home'
+    | '/app/profile'
+    | '/app/communities/create'
+    | '/app/communities/joined'
+    | '/app/daos/create'
+    | '/app/daos/proposals'
+    | '/app/daos/votes'
+    | '/app/games/achievements'
+    | '/app/games/leaderboard'
+    | '/app/games/quizzes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/app'
+    | '/app/communities'
+    | '/app/daos'
+    | '/app/discover'
+    | '/app/games'
+    | '/app/home'
+    | '/app/profile'
+    | '/app/communities/create'
+    | '/app/communities/joined'
+    | '/app/daos/create'
+    | '/app/daos/proposals'
+    | '/app/daos/votes'
+    | '/app/games/achievements'
+    | '/app/games/leaderboard'
+    | '/app/games/quizzes'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/communities'
+    | '/app/daos'
+    | '/app/games'
+    | '/app/communities/'
+    | '/app/daos/'
+    | '/app/discover/'
+    | '/app/games/'
+    | '/app/home/'
+    | '/app/profile/'
+    | '/app/communities/create/'
+    | '/app/communities/joined/'
+    | '/app/daos/create/'
+    | '/app/daos/proposals/'
+    | '/app/daos/votes/'
+    | '/app/games/achievements/'
+    | '/app/games/leaderboard/'
+    | '/app/games/quizzes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +274,204 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/games': {
+      id: '/app/games'
+      path: '/games'
+      fullPath: '/app/games'
+      preLoaderRoute: typeof AppGamesRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/daos': {
+      id: '/app/daos'
+      path: '/daos'
+      fullPath: '/app/daos'
+      preLoaderRoute: typeof AppDaosRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/communities': {
+      id: '/app/communities'
+      path: '/communities'
+      fullPath: '/app/communities'
+      preLoaderRoute: typeof AppCommunitiesRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/profile/': {
+      id: '/app/profile/'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/home/': {
+      id: '/app/home/'
+      path: '/home'
+      fullPath: '/app/home'
+      preLoaderRoute: typeof AppHomeIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/games/': {
+      id: '/app/games/'
+      path: '/'
+      fullPath: '/app/games/'
+      preLoaderRoute: typeof AppGamesIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
+    '/app/discover/': {
+      id: '/app/discover/'
+      path: '/discover'
+      fullPath: '/app/discover'
+      preLoaderRoute: typeof AppDiscoverIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/daos/': {
+      id: '/app/daos/'
+      path: '/'
+      fullPath: '/app/daos/'
+      preLoaderRoute: typeof AppDaosIndexRouteImport
+      parentRoute: typeof AppDaosRouteRoute
+    }
+    '/app/communities/': {
+      id: '/app/communities/'
+      path: '/'
+      fullPath: '/app/communities/'
+      preLoaderRoute: typeof AppCommunitiesIndexRouteImport
+      parentRoute: typeof AppCommunitiesRouteRoute
+    }
+    '/app/games/quizzes/': {
+      id: '/app/games/quizzes/'
+      path: '/quizzes'
+      fullPath: '/app/games/quizzes'
+      preLoaderRoute: typeof AppGamesQuizzesIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
+    '/app/games/leaderboard/': {
+      id: '/app/games/leaderboard/'
+      path: '/leaderboard'
+      fullPath: '/app/games/leaderboard'
+      preLoaderRoute: typeof AppGamesLeaderboardIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
+    '/app/games/achievements/': {
+      id: '/app/games/achievements/'
+      path: '/achievements'
+      fullPath: '/app/games/achievements'
+      preLoaderRoute: typeof AppGamesAchievementsIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
+    '/app/daos/votes/': {
+      id: '/app/daos/votes/'
+      path: '/votes'
+      fullPath: '/app/daos/votes'
+      preLoaderRoute: typeof AppDaosVotesIndexRouteImport
+      parentRoute: typeof AppDaosRouteRoute
+    }
+    '/app/daos/proposals/': {
+      id: '/app/daos/proposals/'
+      path: '/proposals'
+      fullPath: '/app/daos/proposals'
+      preLoaderRoute: typeof AppDaosProposalsIndexRouteImport
+      parentRoute: typeof AppDaosRouteRoute
+    }
+    '/app/daos/create/': {
+      id: '/app/daos/create/'
+      path: '/create'
+      fullPath: '/app/daos/create'
+      preLoaderRoute: typeof AppDaosCreateIndexRouteImport
+      parentRoute: typeof AppDaosRouteRoute
+    }
+    '/app/communities/joined/': {
+      id: '/app/communities/joined/'
+      path: '/joined'
+      fullPath: '/app/communities/joined'
+      preLoaderRoute: typeof AppCommunitiesJoinedIndexRouteImport
+      parentRoute: typeof AppCommunitiesRouteRoute
+    }
+    '/app/communities/create/': {
+      id: '/app/communities/create/'
+      path: '/create'
+      fullPath: '/app/communities/create'
+      preLoaderRoute: typeof AppCommunitiesCreateIndexRouteImport
+      parentRoute: typeof AppCommunitiesRouteRoute
+    }
   }
 }
 
+interface AppCommunitiesRouteRouteChildren {
+  AppCommunitiesIndexRoute: typeof AppCommunitiesIndexRoute
+  AppCommunitiesCreateIndexRoute: typeof AppCommunitiesCreateIndexRoute
+  AppCommunitiesJoinedIndexRoute: typeof AppCommunitiesJoinedIndexRoute
+}
+
+const AppCommunitiesRouteRouteChildren: AppCommunitiesRouteRouteChildren = {
+  AppCommunitiesIndexRoute: AppCommunitiesIndexRoute,
+  AppCommunitiesCreateIndexRoute: AppCommunitiesCreateIndexRoute,
+  AppCommunitiesJoinedIndexRoute: AppCommunitiesJoinedIndexRoute,
+}
+
+const AppCommunitiesRouteRouteWithChildren =
+  AppCommunitiesRouteRoute._addFileChildren(AppCommunitiesRouteRouteChildren)
+
+interface AppDaosRouteRouteChildren {
+  AppDaosIndexRoute: typeof AppDaosIndexRoute
+  AppDaosCreateIndexRoute: typeof AppDaosCreateIndexRoute
+  AppDaosProposalsIndexRoute: typeof AppDaosProposalsIndexRoute
+  AppDaosVotesIndexRoute: typeof AppDaosVotesIndexRoute
+}
+
+const AppDaosRouteRouteChildren: AppDaosRouteRouteChildren = {
+  AppDaosIndexRoute: AppDaosIndexRoute,
+  AppDaosCreateIndexRoute: AppDaosCreateIndexRoute,
+  AppDaosProposalsIndexRoute: AppDaosProposalsIndexRoute,
+  AppDaosVotesIndexRoute: AppDaosVotesIndexRoute,
+}
+
+const AppDaosRouteRouteWithChildren = AppDaosRouteRoute._addFileChildren(
+  AppDaosRouteRouteChildren,
+)
+
+interface AppGamesRouteRouteChildren {
+  AppGamesIndexRoute: typeof AppGamesIndexRoute
+  AppGamesAchievementsIndexRoute: typeof AppGamesAchievementsIndexRoute
+  AppGamesLeaderboardIndexRoute: typeof AppGamesLeaderboardIndexRoute
+  AppGamesQuizzesIndexRoute: typeof AppGamesQuizzesIndexRoute
+}
+
+const AppGamesRouteRouteChildren: AppGamesRouteRouteChildren = {
+  AppGamesIndexRoute: AppGamesIndexRoute,
+  AppGamesAchievementsIndexRoute: AppGamesAchievementsIndexRoute,
+  AppGamesLeaderboardIndexRoute: AppGamesLeaderboardIndexRoute,
+  AppGamesQuizzesIndexRoute: AppGamesQuizzesIndexRoute,
+}
+
+const AppGamesRouteRouteWithChildren = AppGamesRouteRoute._addFileChildren(
+  AppGamesRouteRouteChildren,
+)
+
+interface AppRouteRouteChildren {
+  AppCommunitiesRouteRoute: typeof AppCommunitiesRouteRouteWithChildren
+  AppDaosRouteRoute: typeof AppDaosRouteRouteWithChildren
+  AppGamesRouteRoute: typeof AppGamesRouteRouteWithChildren
+  AppDiscoverIndexRoute: typeof AppDiscoverIndexRoute
+  AppHomeIndexRoute: typeof AppHomeIndexRoute
+  AppProfileIndexRoute: typeof AppProfileIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppCommunitiesRouteRoute: AppCommunitiesRouteRouteWithChildren,
+  AppDaosRouteRoute: AppDaosRouteRouteWithChildren,
+  AppGamesRouteRoute: AppGamesRouteRouteWithChildren,
+  AppDiscoverIndexRoute: AppDiscoverIndexRoute,
+  AppHomeIndexRoute: AppHomeIndexRoute,
+  AppProfileIndexRoute: AppProfileIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

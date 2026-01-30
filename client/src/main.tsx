@@ -8,6 +8,9 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { Toaster } from "./components/ui/sonner";
 
+import { WagmiProvider } from "wagmi";
+import { config } from "./lib/config/wagmi-config";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -35,8 +38,10 @@ if (!rootElement.innerHTML) {
   root.render(
     <ThemeProvider defaultTheme="dark" storageKey="lumini-theme">
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <Toaster richColors position="bottom-right" />
+        <WagmiProvider config={config}>
+          <RouterProvider router={router} />
+          <Toaster richColors position="bottom-right" />
+        </WagmiProvider>
       </QueryClientProvider>
     </ThemeProvider>,
   );

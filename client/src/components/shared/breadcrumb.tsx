@@ -10,29 +10,18 @@ const NavbarBreadcrumb = () => {
   const { pathname } = useLocation();
   const paths = pathname.split("/");
 
-  const includePaths = [
-    "space",
-    "lab",
-    "dashboard",
-    "ask",
-    "canvas",
-    "settings",
-    "general",
-    "",
-  ];
-
-  const filteredPaths = paths.filter((path) => includePaths.includes(path));
-
   return (
-    <Breadcrumb className="hidden md:flex items-center">
+    <Breadcrumb className="hidden md:flex items-center absolute top-4 left-4">
       <BreadcrumbList>
-        {filteredPaths.map((path, index) => {
+        {paths.map((path, index) => {
           return (
             <BreadcrumbLink
               className="cursor-pointer flex gap-2 items-center"
               key={index}
             >
-              <span>{path}</span>
+              <span className="text-md font-semibold text-neutral-300">
+                {path.toLocaleUpperCase()}
+              </span>
               {index != 0 && <BreadcrumbSeparator />}
             </BreadcrumbLink>
           );

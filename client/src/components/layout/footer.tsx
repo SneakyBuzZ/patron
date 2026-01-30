@@ -1,5 +1,5 @@
 import Logo from "@/components/shared/logo";
-import { FOOTER_LISTS, SOCIAL_LISTS } from "@/utils/list-util";
+import { FOOTER_LISTS, SOCIAL_LISTS } from "@/utils/list";
 import { ArrowUpIcon } from "lucide-react";
 
 const Footer = () => {
