@@ -9,6 +9,14 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
+  status = async (req: Request, res: Response) => {
+    return res
+      .status(200)
+      .json(
+        new DataResponse(200, { authenticated: true }, "User is authenticated"),
+      );
+  };
+
   getNonce = async (req: Request, res: Response) => {
     const { address } = req.body;
     const nonce = await this.authService.getNonce(address);

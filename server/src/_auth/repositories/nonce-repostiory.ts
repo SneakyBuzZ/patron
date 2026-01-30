@@ -4,9 +4,9 @@ import { noncesTable } from "@/_auth/tables/nonce-table";
 import { eq } from "drizzle-orm";
 
 const NONCE_EXPIRATION_MINUTES = 5;
-const NONCE_EXPIRATION = new Date(
-  Date.now() + NONCE_EXPIRATION_MINUTES * 60 * 1000,
-);
+function getNonceExpiration() {
+  return new Date(Date.now() + NONCE_EXPIRATION_MINUTES * 60 * 1000);
+}
 
 export class NonceRepisitory {
   async insert(address: string) {
@@ -15,7 +15,7 @@ export class NonceRepisitory {
       .values({
         address,
         nonce: getNonce(),
-        expiresAt: NONCE_EXPIRATION,
+        expiresAt: getNonceExpiration(),
       })
       .returning();
     return row.nonce;

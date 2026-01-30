@@ -24,6 +24,10 @@ export class AuthService {
   async getNonce(address: string) {
     //* Normalize address
     address = address.toLowerCase();
+    const nonce = await this.nonceRepo.findByAddress(address);
+    if (nonce && nonce.expiresAt > new Date()) {
+      return nonce.nonce;
+    }
     return await this.nonceRepo.insert(address);
   }
 
