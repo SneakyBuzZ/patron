@@ -3,48 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Search, Trophy } from "lucide-react";
 
 /* ===================================
-   Dummy Leaderboard Data (API later)
-=================================== */
-
-const LEADERBOARD = [
-  {
-    rank: 1,
-    name: "Kaushik",
-    avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=1",
-    xp: 12450,
-    gamesPlayed: 82,
-  },
-  {
-    rank: 2,
-    name: "BlockMaster",
-    avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=2",
-    xp: 11200,
-    gamesPlayed: 75,
-  },
-  {
-    rank: 3,
-    name: "DAOHunter",
-    avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=3",
-    xp: 10420,
-    gamesPlayed: 69,
-  },
-  {
-    rank: 4,
-    name: "ChainRunner",
-    avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=4",
-    xp: 9870,
-    gamesPlayed: 61,
-  },
-  {
-    rank: 5,
-    name: "QuestLord",
-    avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=5",
-    xp: 9400,
-    gamesPlayed: 58,
-  },
-];
-
-/* ===================================
    Route
 =================================== */
 
@@ -153,3 +111,46 @@ function LeaderboardRow({
     </div>
   );
 }
+
+const LEADERBOARD = [
+  {
+    rank: 1,
+    name: "Kaushik",
+    avatar:
+      "https://i.pinimg.com/564x/99/f3/5a/99f35a4179e659ce63250408e68c8cf6.jpg",
+    xp: 12450,
+    gamesPlayed: 82,
+  },
+  {
+    rank: 2,
+    name: "BlockMaster",
+    avatar:
+      "https://i.pinimg.com/564x/db/8a/97/db8a97c6020e869c86f3a073099dbdf8.jpg",
+    xp: 11200,
+    gamesPlayed: 75,
+  },
+  {
+    rank: 3,
+    name: "DAOHunter",
+    avatar:
+      "https://i.pinimg.com/564x/3a/97/3a/3a973a4179e659ce63250408e68c8cf6.jpg",
+    xp: 10420,
+    gamesPlayed: 69,
+  },
+  {
+    rank: 4,
+    name: "ChainRunner",
+    avatar:
+      "https://i.pinimg.com/564x/1b/0a/6b/1b0a6b80404935ca8cbb78e731e65041.jpg",
+    xp: 9870,
+    gamesPlayed: 61,
+  },
+  {
+    rank: 5,
+    name: "QuestLord",
+    avatar:
+      "https://i.pinimg.com/564x/11/12/98/111298b52d6af98c918ebd23a97a60bf.jpg",
+    xp: 9400,
+    gamesPlayed: 58,
+  },
+];

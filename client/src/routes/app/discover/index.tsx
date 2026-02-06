@@ -2,50 +2,79 @@ import CommunityCard from "@/components/discover/community-card";
 import DaoCard from "@/components/discover/dao-card";
 import GameCard from "@/components/discover/game-card";
 import AppSection from "@/components/shared/app-section";
+import Loading from "@/components/shared/loading";
+import { getAll } from "@/lib/api/community-api";
+import { delay } from "@/utils/delay";
 import { createFileRoute } from "@tanstack/react-router";
 
-const CommunityList = [
-  {
-    cover:
-      "https://i.pinimg.com/736x/0a/d0/09/0ad009a7ff76cfd1020063217600fe9c.jpg",
-    display:
-      "https://i.pinimg.com/736x/9f/4c/25/9f4c2598ee3f12d78d35065639f8e243.jpg",
-    name: "The Figmasters",
-    subtitle:
-      "A community for figma enthusiasts to share and learn about Figma. Community events, tutorials, and resources for all skill levels.",
-    members: 1250,
+export const Route = createFileRoute("/app/discover/")({
+  loader: async ({ context }) => {
+    await delay(1000);
+    const response = await context.queryClient.ensureQueryData({
+      queryKey: ["communities"],
+      queryFn: getAll,
+    });
+    return { data: response };
   },
-  {
-    cover:
-      "https://i.pinimg.com/1200x/9a/8b/b7/9a8bb770d385cf503bf28a46ddde5c89.jpg",
-    display:
-      "https://i.pinimg.com/1200x/5d/2d/74/5d2d74556868a7825d13fabb30911b60.jpg",
-    name: "Tech Enthusiasts",
-    subtitle:
-      "A place to discuss the latest in technology and gadgets. Join us for tech news, reviews, and more.",
-    members: 980,
-  },
-  {
-    cover:
-      "https://i.pinimg.com/736x/5e/14/69/5e1469e98475c79812f9d9420b9b3897.jpg",
-    display:
-      "https://i.pinimg.com/736x/6b/4f/f6/6b4ff6c989f7d6932bcc1c274a132a72.jpg",
-    name: "Foodies United",
-    subtitle:
-      "A community for food lovers to share recipes, restaurant reviews, cooking tips, and explore cuisines from around the world.",
-    members: 1120,
-  },
-  {
-    cover:
-      "https://i.pinimg.com/736x/3b/2d/ed/3b2dedf3f4f4f4f4f4f4f4f4f4f4f4f4.jpg",
-    display:
-      "https://i.pinimg.com/736x/1c/2e/3f/1c2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a.jpg",
-    name: "Travel Buddies",
-    subtitle:
-      "A community for travel enthusiasts to share experiences, tips, and destination recommendations. Join us for travel stories and adventures.",
-    members: 890,
-  },
-];
+  pendingComponent: Loading,
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { data } = Route.useLoaderData();
+  console.log("Discover Data:", data);
+  return (
+    <AppSection>
+      <div className="flex flex-col gap-2 min-w-0">
+        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
+          Popular Communities
+        </h3>
+
+        <div className="grid gap-4 grid-cols-4 w-full">
+          {data.map((community, index) => (
+            <div key={index} className="shrink-0">
+              <CommunityCard
+                cover={community.banner}
+                display={community.avatar}
+                name={community.name}
+                subtitle={community.description}
+                members={community.membersCount}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 min-w-0">
+        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
+          Popular DAOs
+        </h3>
+
+        <div className="grid gap-4 grid-cols-4 w-full">
+          {DaoList.map((dao, index) => (
+            <div key={index} className="shrink-0">
+              <DaoCard {...dao} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 min-w-0">
+        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
+          Popular Games
+        </h3>
+
+        <div className="grid gap-4 grid-cols-4 w-full">
+          {GameList.map((game, index) => (
+            <div key={index} className="shrink-0">
+              <GameCard {...game} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </AppSection>
+  );
+}
 
 const DaoList = [
   {
@@ -80,17 +109,6 @@ const DaoList = [
       "A DAO dedicated to funding and supporting sustainability, climate action, and green technology initiatives.",
     members: 670,
     proposals: 14,
-  },
-  {
-    cover:
-      "https://i.pinimg.com/736x/7c/ed/ae/7cedae1f3f3f4f4f4f4f4f4f4f4f4f4f.jpg",
-    display:
-      "https://i.pinimg.com/736x/2d/3a/5b/2d3a5b6c7e8f9a0b1c2d3e4f5a6b7c8d.jpg",
-    name: "Artisans Guild DAO",
-    subtitle:
-      "A community-driven DAO supporting artists, craftsmen, and creators through funding, collaboration, and resource sharing.",
-    members: 820,
-    proposals: 19,
   },
 ];
 
@@ -129,55 +147,3 @@ const GameList = [
     rewards: "Rare NFT",
   },
 ];
-
-export const Route = createFileRoute("/app/discover/")({
-  component: RouteComponent,
-});
-
-function RouteComponent() {
-  return (
-    <AppSection>
-      <div className="flex flex-col gap-2 min-w-0">
-        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
-          Popular Communities
-        </h3>
-
-        <div className="grid gap-4 grid-cols-4 w-full">
-          {CommunityList.map((community, index) => (
-            <div key={index} className="shrink-0">
-              <CommunityCard {...community} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2 min-w-0">
-        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
-          Popular DAOs
-        </h3>
-
-        <div className="grid gap-4 grid-cols-4 w-full">
-          {DaoList.map((dao, index) => (
-            <div key={index} className="shrink-0">
-              <DaoCard {...dao} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2 min-w-0">
-        <h3 className="text-xl font-semibold font-firacode tracking-tighter">
-          Popular Games
-        </h3>
-
-        <div className="grid gap-4 grid-cols-4 w-full">
-          {GameList.map((game, index) => (
-            <div key={index} className="shrink-0">
-              <GameCard {...game} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </AppSection>
-  );
-}

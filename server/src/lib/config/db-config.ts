@@ -6,6 +6,7 @@ import * as userTable from "@/_user/tables/user-table";
 import * as walletTable from "@/_auth/tables/wallet-table";
 import * as nonceTable from "@/_auth/tables/nonce-table";
 import * as sessionTable from "@/_auth/tables/session-table";
+import * as communityTable from "@/_community/tables/community-table";
 
 import { PgTransaction } from "drizzle-orm/pg-core";
 
@@ -14,6 +15,7 @@ const schema = {
   ...walletTable,
   ...nonceTable,
   ...sessionTable,
+  ...communityTable,
 };
 
 const pool = new Pool({

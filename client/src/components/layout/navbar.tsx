@@ -19,7 +19,7 @@ const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   useEffect(() => {
     if (isSuccess) {
       toast("Successfully signed in!");
-      navigate({ to: "/app" });
+      navigate({ to: "/app/discover" });
     }
   }, [isSuccess, navigate]);
 

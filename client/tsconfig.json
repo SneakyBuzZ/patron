@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["src", "src/**/*.mdx", "src/**/*.svg"],
+  "include": ["src", "src/**/*.mdx", "src/**/*.svg", "src/**/*.json"],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

@@ -21,7 +21,9 @@ import { Route as AppDiscoverIndexRouteImport } from './routes/app/discover/inde
 import { Route as AppDaosIndexRouteImport } from './routes/app/daos/index'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppGamesQuizzesIndexRouteImport } from './routes/app/games/quizzes/index'
+import { Route as AppGamesMineIndexRouteImport } from './routes/app/games/mine/index'
 import { Route as AppGamesLeaderboardIndexRouteImport } from './routes/app/games/leaderboard/index'
+import { Route as AppGamesHighlowIndexRouteImport } from './routes/app/games/highlow/index'
 import { Route as AppGamesAchievementsIndexRouteImport } from './routes/app/games/achievements/index'
 import { Route as AppDaosVotesIndexRouteImport } from './routes/app/daos/votes/index'
 import { Route as AppDaosProposalsIndexRouteImport } from './routes/app/daos/proposals/index'
@@ -89,12 +91,22 @@ const AppGamesQuizzesIndexRoute = AppGamesQuizzesIndexRouteImport.update({
   path: '/quizzes/',
   getParentRoute: () => AppGamesRouteRoute,
 } as any)
+const AppGamesMineIndexRoute = AppGamesMineIndexRouteImport.update({
+  id: '/mine/',
+  path: '/mine/',
+  getParentRoute: () => AppGamesRouteRoute,
+} as any)
 const AppGamesLeaderboardIndexRoute =
   AppGamesLeaderboardIndexRouteImport.update({
     id: '/leaderboard/',
     path: '/leaderboard/',
     getParentRoute: () => AppGamesRouteRoute,
   } as any)
+const AppGamesHighlowIndexRoute = AppGamesHighlowIndexRouteImport.update({
+  id: '/highlow/',
+  path: '/highlow/',
+  getParentRoute: () => AppGamesRouteRoute,
+} as any)
 const AppGamesAchievementsIndexRoute =
   AppGamesAchievementsIndexRouteImport.update({
     id: '/achievements/',
@@ -147,7 +159,9 @@ export interface FileRoutesByFullPath {
   '/app/daos/proposals': typeof AppDaosProposalsIndexRoute
   '/app/daos/votes': typeof AppDaosVotesIndexRoute
   '/app/games/achievements': typeof AppGamesAchievementsIndexRoute
+  '/app/games/highlow': typeof AppGamesHighlowIndexRoute
   '/app/games/leaderboard': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/mine': typeof AppGamesMineIndexRoute
   '/app/games/quizzes': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -165,7 +179,9 @@ export interface FileRoutesByTo {
   '/app/daos/proposals': typeof AppDaosProposalsIndexRoute
   '/app/daos/votes': typeof AppDaosVotesIndexRoute
   '/app/games/achievements': typeof AppGamesAchievementsIndexRoute
+  '/app/games/highlow': typeof AppGamesHighlowIndexRoute
   '/app/games/leaderboard': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/mine': typeof AppGamesMineIndexRoute
   '/app/games/quizzes': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRoutesById {
@@ -187,7 +203,9 @@ export interface FileRoutesById {
   '/app/daos/proposals/': typeof AppDaosProposalsIndexRoute
   '/app/daos/votes/': typeof AppDaosVotesIndexRoute
   '/app/games/achievements/': typeof AppGamesAchievementsIndexRoute
+  '/app/games/highlow/': typeof AppGamesHighlowIndexRoute
   '/app/games/leaderboard/': typeof AppGamesLeaderboardIndexRoute
+  '/app/games/mine/': typeof AppGamesMineIndexRoute
   '/app/games/quizzes/': typeof AppGamesQuizzesIndexRoute
 }
 export interface FileRouteTypes {
@@ -210,7 +228,9 @@ export interface FileRouteTypes {
     | '/app/daos/proposals'
     | '/app/daos/votes'
     | '/app/games/achievements'
+    | '/app/games/highlow'
     | '/app/games/leaderboard'
+    | '/app/games/mine'
     | '/app/games/quizzes'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -228,7 +248,9 @@ export interface FileRouteTypes {
     | '/app/daos/proposals'
     | '/app/daos/votes'
     | '/app/games/achievements'
+    | '/app/games/highlow'
     | '/app/games/leaderboard'
+    | '/app/games/mine'
     | '/app/games/quizzes'
   id:
     | '__root__'
@@ -249,7 +271,9 @@ export interface FileRouteTypes {
     | '/app/daos/proposals/'
     | '/app/daos/votes/'
     | '/app/games/achievements/'
+    | '/app/games/highlow/'
     | '/app/games/leaderboard/'
+    | '/app/games/mine/'
     | '/app/games/quizzes/'
   fileRoutesById: FileRoutesById
 }
@@ -344,11 +368,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGamesQuizzesIndexRouteImport
       parentRoute: typeof AppGamesRouteRoute
     }
+    '/app/games/mine/': {
+      id: '/app/games/mine/'
+      path: '/mine'
+      fullPath: '/app/games/mine'
+      preLoaderRoute: typeof AppGamesMineIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
     '/app/games/leaderboard/': {
       id: '/app/games/leaderboard/'
       path: '/leaderboard'
       fullPath: '/app/games/leaderboard'
       preLoaderRoute: typeof AppGamesLeaderboardIndexRouteImport
+      parentRoute: typeof AppGamesRouteRoute
+    }
+    '/app/games/highlow/': {
+      id: '/app/games/highlow/'
+      path: '/highlow'
+      fullPath: '/app/games/highlow'
+      preLoaderRoute: typeof AppGamesHighlowIndexRouteImport
       parentRoute: typeof AppGamesRouteRoute
     }
     '/app/games/achievements/': {
@@ -432,14 +470,18 @@ const AppDaosRouteRouteWithChildren = AppDaosRouteRoute._addFileChildren(
 interface AppGamesRouteRouteChildren {
   AppGamesIndexRoute: typeof AppGamesIndexRoute
   AppGamesAchievementsIndexRoute: typeof AppGamesAchievementsIndexRoute
+  AppGamesHighlowIndexRoute: typeof AppGamesHighlowIndexRoute
   AppGamesLeaderboardIndexRoute: typeof AppGamesLeaderboardIndexRoute
+  AppGamesMineIndexRoute: typeof AppGamesMineIndexRoute
   AppGamesQuizzesIndexRoute: typeof AppGamesQuizzesIndexRoute
 }
 
 const AppGamesRouteRouteChildren: AppGamesRouteRouteChildren = {
   AppGamesIndexRoute: AppGamesIndexRoute,
   AppGamesAchievementsIndexRoute: AppGamesAchievementsIndexRoute,
+  AppGamesHighlowIndexRoute: AppGamesHighlowIndexRoute,
   AppGamesLeaderboardIndexRoute: AppGamesLeaderboardIndexRoute,
+  AppGamesMineIndexRoute: AppGamesMineIndexRoute,
   AppGamesQuizzesIndexRoute: AppGamesQuizzesIndexRoute,
 }
 

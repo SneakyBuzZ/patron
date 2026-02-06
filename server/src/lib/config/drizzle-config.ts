@@ -5,7 +5,11 @@ const DATABASE_URL = process.env.DATABASE_URL!;
 
 export default defineConfig({
   out: "./database",
-  schema: ["./src/_user/tables/*.ts", "./src/_auth/tables/*.ts"],
+  schema: [
+    "./src/_user/tables/*.ts",
+    "./src/_auth/tables/*.ts",
+    "./src/_community/tables/*.ts",
+  ],
   dialect: "postgresql",
   dbCredentials: {
     url: DATABASE_URL,

@@ -7,6 +7,9 @@ import cors from "cors";
 import { CLIENT_URL, COOKIE_SECRET } from "@/utils/constants";
 import { errorMiddleware } from "@/middlewares/error-middleware";
 import { authRouter } from "@/_auth/routes/auth-route";
+import { userRouter } from "./_user/routes/user-route";
+import { authenticateJwt } from "./middlewares/authenticate-middleware";
+import { communityRouter } from "./_community/routes/community-route";
 
 const app = express();
 
@@ -23,6 +26,8 @@ app.get("/", (_, res) => {
 app.use(errorMiddleware);
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", authenticateJwt(), userRouter);
+app.use("/api/communities", authenticateJwt(), communityRouter);
 
 const server = http.createServer(app);
 

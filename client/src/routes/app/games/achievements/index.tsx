@@ -3,53 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Trophy, Lock } from "lucide-react";
 
-/* ===================================
-   Dummy Data (replace via API later)
-=================================== */
-
-const ACHIEVEMENTS = [
-  {
-    id: 1,
-    title: "First Victory",
-    description: "Win your first game match.",
-    icon: "🏆",
-    unlocked: true,
-    progress: 100,
-    reward: "50 XP",
-  },
-  {
-    id: 2,
-    title: "DAO Challenger",
-    description: "Participate in 10 governance quizzes.",
-    icon: "⚖️",
-    unlocked: true,
-    progress: 100,
-    reward: "Badge NFT",
-  },
-  {
-    id: 3,
-    title: "Game Marathon",
-    description: "Play 50 games across platforms.",
-    icon: "🎮",
-    unlocked: false,
-    progress: 70,
-    reward: "150 XP",
-  },
-  {
-    id: 4,
-    title: "Quiz Master",
-    description: "Score above 80% in 20 quizzes.",
-    icon: "🧠",
-    unlocked: false,
-    progress: 35,
-    reward: "Rare NFT",
-  },
-];
-
-/* ===================================
-   Route
-=================================== */
-
 export const Route = createFileRoute("/app/games/achievements/")({
   component: AchievementsPage,
 });
@@ -186,3 +139,42 @@ function StatCard({ label, value }: StatCardProps) {
     </div>
   );
 }
+
+const ACHIEVEMENTS = [
+  {
+    id: 1,
+    title: "First Victory",
+    description: "Win your first game match.",
+    icon: "🏆",
+    unlocked: true,
+    progress: 100,
+    reward: "50 XP",
+  },
+  {
+    id: 2,
+    title: "DAO Challenger",
+    description: "Participate in 10 governance quizzes.",
+    icon: "⚖️",
+    unlocked: true,
+    progress: 100,
+    reward: "Badge NFT",
+  },
+  {
+    id: 3,
+    title: "Game Marathon",
+    description: "Play 50 games across platforms.",
+    icon: "🎮",
+    unlocked: false,
+    progress: 70,
+    reward: "150 XP",
+  },
+  {
+    id: 4,
+    title: "Quiz Master",
+    description: "Score above 80% in 20 quizzes.",
+    icon: "🧠",
+    unlocked: false,
+    progress: 35,
+    reward: "Rare NFT",
+  },
+];

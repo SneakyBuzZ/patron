@@ -47,6 +47,20 @@ function RouteComponent() {
   );
 }
 
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center text-neutral-400 gap-3">
+      <div className="text-lg font-medium text-neutral-300">
+        No communities joined yet
+      </div>
+      <p className="text-sm max-w-md">
+        Join communities to collaborate, learn, and participate in discussions
+        with like-minded people.
+      </p>
+    </div>
+  );
+}
+
 const JoinedCommunities = [
   {
     cover:
@@ -68,17 +82,3 @@ const JoinedCommunities = [
     members: 1120,
   },
 ];
-
-function EmptyState() {
-  return (
-    <div className="flex flex-col items-center justify-center py-20 text-center text-neutral-400 gap-3">
-      <div className="text-lg font-medium text-neutral-300">
-        No communities joined yet
-      </div>
-      <p className="text-sm max-w-md">
-        Join communities to collaborate, learn, and participate in discussions
-        with like-minded people.
-      </p>
-    </div>
-  );
-}
